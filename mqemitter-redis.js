@@ -16,8 +16,13 @@ function MQEmitterRedis (opts) {
   opts = opts || {}
   this._opts = opts
 
-  this.subConn = new Redis(opts)
-  this.pubConn = new Redis(opts)
+  if (opts.cluster === true) {
+    this.subConn = new Redis.Cluster(opts)
+    this.pubConn = new Redis.Cluster(opts)
+  } else {
+    this.subConn = new Redis(opts)
+    this.pubConn = new Redis(opts)
+  }
 
   this._topics = {}
 
